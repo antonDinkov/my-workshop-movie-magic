@@ -4,5 +4,8 @@ module.exports = {
     },
     details: (req, res) => {
          res.render("details", { title: "Details" })
+    },
+    search: (req, res) => {
+         res.render("search", { title: "Search" })
     }
 };
