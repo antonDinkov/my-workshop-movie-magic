@@ -62,7 +62,7 @@ async function createMovie(movieData) {
     return toMovieModel(movie);/* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
 };
 
-function uuid(params) {
+function uuid() {
     return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));/* 16-тично число на мястото на всеки x(0-F) */
 }
 
