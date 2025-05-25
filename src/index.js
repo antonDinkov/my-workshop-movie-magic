@@ -2,6 +2,7 @@ const express = require("express");
 const { configHbs } = require("./config/hbs");
 const { configExpress } = require("./config/express");
 const { router } = require("./config/routes");
+const { notFound } = require("./controllers/404");
 
 
 
@@ -12,5 +13,7 @@ const app = express();
 configHbs(app)
 configExpress(app);
 app.use(router);
+
+app.use(notFound)// <-- тaka ми работи и съответно е махнато от routes.js
 
 app.listen(PORT);
