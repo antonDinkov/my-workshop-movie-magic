@@ -28,5 +28,15 @@
         "imageURL": "/static/img/home-alone.jpeg",
         "rating": "7.7",
         "description": "It is Christmas time and the McCallister family is preparing for a vacation in Paris, France. But the youngest in the family, Kevin (Macaulay Culkin), got into a scuffle with his older brother Buzz (Devin Ratray) and was sent to his room, which is on the third floor of his house. Then, the next morning, while the rest of the family was in a rush to make it to the airport on time, they completely forgot about Kevin, who now has the house all to himself. Being home alone was fun for Kevin, having a pizza all to himself, jumping on his parents' bed, and making a mess. Then, Kevin discovers about two burglars, Harry (Joe Pesci) and Marv (Daniel Stern), about to rob his house on Christmas Eve. Kevin acts quickly by wiring his own house with makeshift booby traps to stop the burglars and to bring them to justice."
-    }
+    },
+    {
+    "id": "4",
+    "title": "Dune: Part One",
+    "genre": "Science Fiction",
+    "director": "Denis Villeneuve",
+    "year": "2021",
+    "imageURL": "/static/img/dune.png",
+    "rating": "8.0",
+    "description": "In the far future, Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people. As malevolent forces explode into conflict over the planet's exclusive supply of the most precious resource in existence—spice—only those who can conquer their fear will survive."
+}
 ]

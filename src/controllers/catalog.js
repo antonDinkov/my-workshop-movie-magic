@@ -1,6 +1,10 @@
+const { getAllMovies } = require("../services/movie");
+
 module.exports = {
-    home: (req, res) => {
-        res.render("home", { title: "Home Page" })
+    home: async (req, res) => {
+        const movies = await getAllMovies();
+
+        res.render("home", { title: "Home Page", movies })//контекста се подава като обект
     },
     details: (req, res) => {
          res.render("details", { title: "Details" })
