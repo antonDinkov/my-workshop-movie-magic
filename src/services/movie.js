@@ -3,7 +3,7 @@ const { Movie } = require('../models/Movie');
 
 const filePath = './data/database.json'
 
-async function readFile(params) {
+async function readFile() {
     const data = await fs.readFile(filePath);
 
     return JSON.parse(data.toString());
@@ -41,7 +41,33 @@ async function getMovieById(id) {
     return movie ? toMovieModel(movie) : movie;//ако има филм върни филма, ако няма пак връща филма, който ще бъде undefined
 };
 
+async function createMovie(movieData) {
+    const id = uuid();
+
+    const movie = {
+        id,
+        title: movieData.title,
+        genre: movieData.genre,
+        director: movieData.director,
+        year: Number(movieData.year),
+        imageURL: movieData.imageURL,
+        rating: Number(movieData.rating),
+        description: movieData.description
+    };
+
+    const movies = await readFile();
+    movies.push(movie);
+    await writeFile(movies);
+
+    return toMovieModel(movie);/* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
+};
+
+function uuid(params) {
+    return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));/* 16-тично число на мястото на всеки x(0-F) */
+}
+
 module.exports = {
     getAllMovies,
-    getMovieById
+    getMovieById,
+    createMovie
 };

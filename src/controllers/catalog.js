@@ -1,4 +1,4 @@
-const { getAllMovies } = require("../services/movie");
+const { getAllMovies, getMovieById } = require("../services/movie");
 
 module.exports = {
     home: async (req, res) => {
@@ -6,10 +6,20 @@ module.exports = {
 
         res.render("home", { title: "Home Page", movies })//контекста се подава като обект
     },
-    details: (req, res) => {
-         res.render("details", { title: "Details" })
+    details: async (req, res) => {
+        const id = req.params.id;
+        const movie = await getMovieById(id);
+
+        if (!movie) {
+            res.render('404');
+            return;
+        };
+
+        movie.starRating = '&#x2605;'.repeat(movie.rating);
+
+        res.render("details", { title: "Details", movie });
     },
     search: (req, res) => {
-         res.render("search", { title: "Search" })
+        res.render("search", { title: "Search" })
     }
 };
