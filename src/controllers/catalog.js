@@ -19,7 +19,8 @@ module.exports = {
 
         res.render("details", { title: "Details", movie });
     },
-    search: (req, res) => {
-        res.render("search", { title: "Search" })
+    search: async (req, res) => {
+        const movies = await getAllMovies();
+        res.render("search", { title: "Search", movies })
     }
 };
