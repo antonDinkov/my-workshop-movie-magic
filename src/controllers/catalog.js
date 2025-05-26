@@ -21,6 +21,31 @@ module.exports = {
     },
     search: async (req, res) => {
         const movies = await getAllMovies();
-        res.render("search", { title: "Search", movies })
+
+        const { title, genre, year } = req.query;
+        if (!title && !genre && !year) {
+            res.render("search", { title: "Search", movies })
+        } else {
+            const filteredMovies = movies.filter(movie => {
+                
+                const movieTitle = movie.title.toLowerCase();
+                const searchTerm = (title || "").toLowerCase();
+                const movieGenre = (movie.genre || "").toLowerCase();
+                const genreFilter = (genre || "").toLowerCase();
+
+                
+                const movieYear = Number(movie.year);
+                const yearFilter = Number(year);
+
+                
+                const matchesTitle = !searchTerm || movieTitle.includes(searchTerm);
+                const matchesGenre = !genreFilter || movieGenre === genreFilter;
+                const matchesYear = !yearFilter || movieYear === yearFilter;
+
+                return matchesTitle && matchesGenre && matchesYear;
+            });
+
+            res.render('search', { title: 'Search', movies: filteredMovies, title, genre, year})
+        }
     }
 };
