@@ -3,17 +3,25 @@ const { configHbs } = require("./config/hbs");
 const { configExpress } = require("./config/express");
 const { router } = require("./config/routes");
 const { notFound } = require("./controllers/404");
+const { configDatabase } = require("./config/database");
 
 
 
 const PORT = process.env.PORT || 3000;
 
-const app = express();
+async function start() {
+    const app = express();
 
-configHbs(app)
-configExpress(app);
-app.use(router);
+    await configDatabase();
+    configHbs(app)
+    configExpress(app);
+    app.use(router);
 
-app.use(notFound)// <-- тaka ми работи и съответно е махнато от routes.js
+    app.use(notFound)// <-- тaka ми работи и съответно е махнато от routes.js
 
-app.listen(PORT);
+    app.listen(PORT, () => {
+        console.log(`Application running on port ${PORT}`);
+    });
+};
+
+start();

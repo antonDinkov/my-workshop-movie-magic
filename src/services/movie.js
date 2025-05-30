@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
+/* const fs = require('fs/promises'); */
 const { Movie } = require('../models/Movie');
 
-const filePath = './data/database.json'
+/* const filePath = './data/database.json' */
 
-async function readFile() {
+/* async function readFile() {
     const data = await fs.readFile(filePath);
 
     return JSON.parse(data.toString());
@@ -11,9 +11,9 @@ async function readFile() {
 
 async function writeFile(data) {
     await fs.writeFile(filePath, JSON.stringify(data));
-};
+}; */
 
-function toMovieModel(data) {
+/* function toMovieModel(data) {
     const movie = new Movie();
 
     movie.id = data.id;
@@ -26,23 +26,39 @@ function toMovieModel(data) {
     movie.description = data.description;
 
     return movie;
-};
+}; */
 
 async function getAllMovies() {
-    const movies = await readFile();
-    return movies.map(toMovieModel)//приема data от всяко movie
+    const movies = await Movie.find().lean();/* lean винаги се закача преди да се ауейтне за да ни върне суровата база данни */    /* readFile(); */
+    return movies/* .map(toMovieModel) *///приема data от всяко movie
 };
 
 async function getMovieById(id) {
-    const movies = await readFile();
+    const movie = await Movie.findById(id).lean();
+    return movie;
+    
+    /* const movies = await readFile();
 
     const movie = movies.find(m => m.id == id);
 
-    return movie ? toMovieModel(movie) : movie;//ако има филм върни филма, ако няма пак връща филма, който ще бъде undefined
+    return movie ? toMovieModel(movie) : movie; *///ако има филм върни филма, ако няма пак връща филма, който ще бъде undefined
 };
 
 async function createMovie(movieData) {
-    const id = uuid();
+    const movie = new Movie({
+        title: movieData.title,
+        genre: movieData.genre,
+        director: movieData.director,
+        year: Number(movieData.year),
+        rating: Number(movieData.rating),
+        description: movieData.description,
+        imageURL: movieData.imageURL
+    });
+
+    await movie.save();
+
+    return movie;
+    /* const id = uuid();
 
     const movie = {
         id,
@@ -59,12 +75,12 @@ async function createMovie(movieData) {
     movies.push(movie);
     await writeFile(movies);
 
-    return toMovieModel(movie);/* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
+    return toMovieModel(movie); *//* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
 };
 
-function uuid() {
-    return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16));/* 16-тично число на мястото на всеки x(0-F) */
-}
+/* function uuid() {
+    return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); *//* 16-тично число на мястото на всеки x(0-F) */
+/* } */
 
 module.exports = {
     getAllMovies,
