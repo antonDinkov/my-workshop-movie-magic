@@ -34,7 +34,8 @@ async function getAllMovies() {
 };
 
 async function getMovieById(id) {
-    const movie = await Movie.findById(id).lean();
+    const movie = await Movie.findById(id).lean().populate('cast');
+
     return movie;
     
     /* const movies = await readFile();
@@ -78,6 +79,21 @@ async function createMovie(movieData) {
     return toMovieModel(movie); *//* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
 };
 
+async function attachCastToMovie(movieId, castId) {
+    const movie = await Movie.findById(movieId);/* методът е на базата данни - монгууз */
+
+    if (!movie) {
+        throw new Error(`Movie ${movieId} not found`);
+        
+    }
+
+    movie.cast.push(castId);
+
+    await movie.save();
+
+    return movie;
+}
+
 /* function uuid() {
     return 'xxxx-xxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)); *//* 16-тично число на мястото на всеки x(0-F) */
 /* } */
@@ -85,5 +101,6 @@ async function createMovie(movieData) {
 module.exports = {
     getAllMovies,
     getMovieById,
-    createMovie
+    createMovie,
+    attachCastToMovie
 };
