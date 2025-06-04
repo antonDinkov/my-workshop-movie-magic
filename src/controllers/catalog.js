@@ -2,17 +2,18 @@ const { getAllMovies, getMovieById } = require("../services/movie");
 
 module.exports = {
     home: async (req, res) => {
+        console.log(req.user);
         const movies = await getAllMovies();
 
         res.clearCookie('token');
 
         res.render("home", { title: "Home Page", movies })//контекста се подава като обект
     },
-    details: async (req, res) => {
+    details: async (req, res) => { 
         const id = req.params.id;
         const movie = await getMovieById(id);
 
-        if (!movie) {
+        if (!movie) { 
             res.render('404');
             return;
         };
