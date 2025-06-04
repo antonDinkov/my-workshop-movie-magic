@@ -2,8 +2,11 @@ const { getAllMovies, getMovieById } = require("../services/movie");
 
 module.exports = {
     home: async (req, res) => {
-        console.log(req.user);
         const movies = await getAllMovies();
+
+        for (const movie of movies) {
+            movie.isAuthor = req.user && req.user._id == movie.author.toString();
+        };
 
         res.render("home", { title: "Home Page", movies })//контекста се подава като обект
     },
@@ -16,6 +19,7 @@ module.exports = {
             return;
         };
 
+        movie.isAuthor = req.user?._id == movie.author.toString();
         movie.starRating = '&#x2605;'.repeat(movie.rating);
 
         res.render("details", { title: "Details", movie });
