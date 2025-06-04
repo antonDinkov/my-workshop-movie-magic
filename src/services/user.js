@@ -24,6 +24,20 @@ async function login(email, password) {
     //check if user exist -> throw error if false
     //compare hashed password -> throe error if false
     //return matched user
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new Error('Incorrect email or password');
+    };
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if(!match) {
+        throw new Error('Incorrect email or password');
+    };
+
+    return user;
 };
 
 module.exports = {

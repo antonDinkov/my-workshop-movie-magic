@@ -5,8 +5,6 @@ module.exports = {
         console.log(req.user);
         const movies = await getAllMovies();
 
-        res.clearCookie('token');
-
         res.render("home", { title: "Home Page", movies })//контекста се подава като обект
     },
     details: async (req, res) => { 
