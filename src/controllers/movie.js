@@ -5,6 +5,8 @@ module.exports = {
         res.render('create', { title: 'Create' });
     },
     createPost: async (req, res) => {
+        const authorId = req.user._id;
+
         const errors = {
             title: !req.body.title,
             genre: !req.body.genre,
@@ -20,7 +22,7 @@ module.exports = {
             return;
         }
 
-        const result = await createMovie(req.body);
+        const result = await createMovie(req.body, authorId);
 
         res.redirect('/details/' + result._id);
     }
