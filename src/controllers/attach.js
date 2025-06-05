@@ -37,6 +37,7 @@ module.exports = {
         try {
             await attachCastToMovie(movieId, castId);
         } catch (err) {
+            console.error('Error adding cast to movie', err);
             res.status(400).end();
             return;
         }

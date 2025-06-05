@@ -80,14 +80,14 @@ async function createMovie(movieData, authorId) {
     return toMovieModel(movie); *//* кото го върна като инстанция на клас това ми дава тайп чекинг(type-checking) */
 };
 
-async function updateMovie(movieId, movieData, authorId) {
+async function updateMovie(movieId, movieData, userId) {
     const movie = await Movie.findById(movieId);
 
     if (!movie) {
         throw new Error(`Movie ${movieId} not found`);
     };
 
-    if (movie.author.toString() != authorId) {
+    if (movie.author.toString() != userId) {
         throw new Error(`Access denied`);
     };
 
@@ -104,12 +104,30 @@ async function updateMovie(movieId, movieData, authorId) {
     return movie;
 };
 
-async function attachCastToMovie(movieId, castId) {
+async function deleteMovie(movieId, userId) {
+    const movie = await Movie.findById(movieId);
+
+    if (!movie) {
+        throw new Error(`Movie ${movieId} not found`);
+    };
+
+    if (movie.author.toString() != userId) {
+        throw new Error('Access denied');
+    };
+
+    await Movie.findByIdAndDelete(movieId);
+}
+
+async function attachCastToMovie(movieId, castId, userId) {
     const movie = await Movie.findById(movieId);/* методът е на базата данни - монгууз */
 
     if (!movie) {
         throw new Error(`Movie ${movieId} not found`);
-    }
+    };
+
+    if (movie.author.toString() != userId) {
+        throw new Error(`Access denied`);
+    };
 
     movie.cast.push(castId);
 
@@ -127,5 +145,6 @@ module.exports = {
     getMovieById,
     createMovie,
     updateMovie,
+    deleteMovie,
     attachCastToMovie
 };
