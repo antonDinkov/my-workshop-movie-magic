@@ -1,4 +1,7 @@
 const {Router} = require("express");
+
+const { isGuest, isUser} = require('../middlewares/guards');
+
 const { home, details, search } = require("../controllers/catalog");
 const { about } = require("../controllers/about");
 const { createGet, createPost } = require("../controllers/movie");
@@ -13,17 +16,17 @@ const router = Router();
 router.get('/', home);
 router.get('/about', about);
 router.get('/details/:id', details);
-router.get('/attach/:id', attachGet);
-router.post('/attach/:id', attachPost);
-router.get('/create/movie', createGet);
-router.post('/create/movie', createPost);
-router.get('/create/cast', createCastGet);
-router.post('/create/cast', createCastPost);
+router.get('/attach/:id', isUser(), attachGet);
+router.post('/attach/:id', isUser(), attachPost);
+router.get('/create/movie', isUser(), createGet);
+router.post('/create/movie', isUser(), createPost);
+router.get('/create/cast', isUser(), createCastGet);
+router.post('/create/cast', isUser(), createCastPost);
 router.get('/search', search);
-router.get('/register', registerGet);
-router.post('/register', registerPost);
-router.get('/login', loginGet);
-router.post('/login', loginPost);
+router.get('/register', isGuest(), registerGet);/* гардовете се поставят пред контролера */
+router.post('/register', isGuest(), registerPost);
+router.get('/login', isGuest(), loginGet);
+router.post('/login', isGuest(), loginPost);
 router.get('/logout', logout);
 
 
