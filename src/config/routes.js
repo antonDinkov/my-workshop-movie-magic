@@ -7,9 +7,13 @@ const { about } = require("../controllers/about");
 const { createGet, createPost, editGet, editPost, deleteGet, deletePost } = require("../controllers/movie");
 const { createGet: createCastGet, createPost: createCastPost } = require('../controllers/cast');
 const { attachGet, attachPost } = require("../controllers/attach");
-const { registerGet, registerPost, loginGet, loginPost, logout } = require("../controllers/user");
+const { userRouter } = require("../controllers/user");
 
 const router = Router();
+
+function configRoutes(app) {
+    //TODO
+};
 
 //TODO add routes
 
@@ -30,12 +34,7 @@ router.post('/create/movie', isUser(), createPost);
 router.get('/create/cast', isUser(), createCastGet);
 router.post('/create/cast', isUser(), createCastPost);
 
-router.get('/register', isGuest(), registerGet);/* гардовете се поставят пред контролера */
-router.post('/register', isGuest(), registerPost);
-router.get('/login', isGuest(), loginGet);
-router.post('/login', isGuest(), loginPost);
-router.get('/logout', logout);
-
+router.use(userRouter);
 
 /* router.get('/*', notFound) */// <--Тази част от кода ми блокира изцяло приложението и всички пътища спират да работят
 
