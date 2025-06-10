@@ -119,6 +119,10 @@ footer {
     padding: 0.7em 1em;
 }
 
+.error {
+    color: red;
+}
+
 .error-container {
     position: fixed;
     right: 5em;
