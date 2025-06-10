@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator')
 const { createToken } = require("../services/token");
 const { register, login } = require("../services/user");
 const { isGuest } = require('../middlewares/guards');
+const { parseError } = require('../util');
 
 const userRouter = Router();
 /* гардовете се поставят пред контролера */
@@ -19,17 +20,13 @@ userRouter.post('/register',
         return value == req.body.password;
     }).withMessage('Password don\'t match'),
     async (req, res) => {
-        const { email, password, repass } = req.body;
+        const { email, password } = req.body;
 
         try {
             const result = validationResult(req);
 
             if (result.errors.length) {
-                const errors = Object.fromEntries(result.errors.map(e => [e.path, e.msg]));
-                const err = new Error('Input validation error');
-                err.errors = errors;
-
-                throw err;
+                throw result.errors;
             }
 
             const user = await register(email, password);
@@ -39,11 +36,10 @@ userRouter.post('/register',
 
             res.redirect('/');
         } catch (err) {
-            res.render('register', { data: { email }, errors: err.errors });
-            return;
+            res.render('register', { data: { email }, errors: parseError(err).errors });
+            return; 
         }
     });
-
 
 userRouter.get('/login', isGuest(), (req, res) => {
     res.render('login');
