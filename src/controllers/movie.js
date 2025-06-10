@@ -1,35 +1,34 @@
 const { Router } = require('express');
+const { body, validationResult } = require('express-validator')
 
 const { createMovie, getMovieById, updateMovie, deleteMovie } = require("../services/movie");
 const mongoose = require('mongoose');
 const { isUser } = require('../middlewares/guards');
+const { parseError } = require('../util');
 
 const movieRouter = Router();
 
 movieRouter.get('/create/movie', isUser(), (req, res) => {
     res.render('create', { title: 'Create' });
 });
-movieRouter.post('/create/movie', isUser(), async (req, res) => {
+movieRouter.post('/create/movie', isUser(),
+body('imageURL').trim().isURL().withMessage('Enter valid url'),
+async (req, res) => {
     const authorId = req.user._id;
 
-    const errors = {
-        title: !req.body.title,
-        genre: !req.body.genre,
-        director: !req.body.director,
-        year: !req.body.year,
-        imageURL: !req.body.imageURL,
-        rating: !req.body.rating,
-        description: !req.body.description
+    try {
+        const validation = validationResult(req);
+
+        if (validation.errors.length) {
+            throw validation.errors;
+        }
+        const result = await createMovie(req.body, authorId);
+        res.redirect('/details/' + result._id);
+    } catch (err) {
+        res.render('create', { movie: req.body, errors: parseError(err).errors });
     }
 
-    if (Object.values(errors).some(e => e)) {
-        res.render('create', { movie: req.body, errors })
-        return;
-    };
 
-    const result = await createMovie(req.body, authorId);
-
-    res.redirect('/details/' + result._id);
 });
 movieRouter.get('/edit/:id', isUser(), async (req, res) => {
     const movieId = req.params.id;

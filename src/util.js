@@ -3,8 +3,13 @@ function parseError(err) {
         // generic error
         if (!err.errors) {
             err.errors = [err.message];
+        } else {
+            //mongoose validation errors
+            const error = new Error('Input validation error');
+            error.errors = Object.fromEntries(Object.values(err.errors).map(e => [e.path, e.message]));
+
+            return error;
         }
-        //TODO parse Mongoose validation errors here
     } else if (Array.isArray(err)) {
         //express-validator error array
         const error = new Error('Input validation error');
@@ -17,4 +22,4 @@ function parseError(err) {
     return err;
 }
 
-module.exports = { parseError}
+module.exports = { parseError }
